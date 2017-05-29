@@ -219,6 +219,13 @@ for i in xrange(len(flat_verts)/2):
     print x,y
     print
 
+# flatten a list of list ------------------------------------------------------
+flatten = lambda l: [item for sublist in l for item in sublist]
+vtx= [(1, 2), (3, 4), (5, 6)]
+flat_verts = flatten(vtx)
+print flat_verts
+
+
 # }}} ----------------------- END OF DICTIONARY SECTION -----------------------
 
 # {{{ OPEN GL -----------------------------------------------------------------
