@@ -61,7 +61,7 @@ for i in g:
     print i
 
 
-# pair generator example ----------------------------------------------------
+# pair generator example ------------------------------------------------------
 
 a=[x for x in range (10)]
 print a
@@ -76,7 +76,19 @@ for x, y in iterate_pairs(a):
     print
 
 
-# }}} ----------------------- END OF GENERATORS SECTION -----------------------
+# groups of 4 points generator example ----------------------------------------
+
+def quad_generator(pts):
+    for i in range(0,len(pts)-1, 3):
+        j=(i+3)/4
+        yield j,  pts[i], pts[i+1], pts[i+2], pts[i+3], rec_color[j]
+
+list_of_pts = ('a','b','c','d','e','f','g','h','i','j','k','l','a')
+quads = quad_generator(list_of_pts)
+for i, a, b, c, d in quads:
+    print i, a, b, c, d
+
+    # }}} ----------------------- END OF GENERATORS SECTION -----------------------
 
 # {{{ GEOMETRY ----------------------------------------------------------------
 '''
@@ -84,40 +96,60 @@ for x, y in iterate_pairs(a):
                                     GEOMETRY
 
 '''
+# normal of an edge -----------------------------------------------------------
+    '''
+    ---------------------------------------------------------------------------
+    NORMAL VECTOR
+    To get a normal between points p1 and p2 rotate the vector p1->p2 clockwise
+    through 90 degrees. That is for a segment going from (x1,y1) to (x2,y2):
+
+        n = (dy, -dx) with: dx=x2-x1 and dy=y2-y1,
+
+    The opposite normal vector is: n’=(-dy, dx)
+    ---------------------------------------------------------------------------
+    '''
+
+    Point = namedtuple('Point', 'x y')
+vtx= [(1, 2), (3, 4), (5, 6)]
+for i,v in enumerate(vtx[0: -1]):
+    norm = Point(v[i+1].x - v[i].x, v[i+1].y - v[i].y)
+    print 'edge', i, norm
+
+
 # transformation matrix 2D example --------------------------------------------
-'''
-A trois coordonnées, avec des matrices qui sont toujours carrées,
-on peut composer plusieur transformations en multipliant les matrices
-correspondant à chaque opération DANS UN ORDRE PRECIS.
-Si le point 2D devient artificielement un vecteur à 3 coordonnées (x,y,z)
-(par défaut on fixe z=1), la matrice générale des transformations 2d devient :
-		[x']   [a b m]   [x]   [ax + by + mz]   [ax + by + mz]
-		[y'] = [c d n] * [y] = [cx + dy + nz] = [cx + dy + nz]
-		[z']   [0 0 1]   [z]   [0x + 0y + 1z]	[     1      ]
+    '''
+    A trois coordonnées, avec des matrices qui sont toujours carrées,
+    on peut composer plusieur transformations en multipliant les matrices
+    correspondant à chaque opération DANS UN ORDRE PRECIS.
+    Si le point 2D devient artificielement un vecteur à 3 coordonnées (x,y,z)
+    (par défaut on fixe z=1), la matrice générale des transformations 2d devient :
+                    [x']   [a b m]   [x]   [ax + by + mz]   [ax + by + mz]
+                    [y'] = [c d n] * [y] = [cx + dy + nz] = [cx + dy + nz]
+                    [z']   [0 0 1]   [z]   [0x + 0y + 1z]	[     1      ]
 
 
-Transformation matrix for a (dx,dy) translation
------------------------------------------------
+    Transformation matrix for a (dx,dy) translation
+    -----------------------------------------------
 
-                    [ 1  0  dx]
-                    [ 0  1  dy]
-                    [ 0  0   1]
+                        [ 1  0  dx]
+                        [ 0  1  dy]
+                        [ 0  0   1]
 
-Matrice type de mise à l'échelle
---------------------------------
+    Matrice type de mise à l'échelle
+    --------------------------------
 
-    		    [Sx  0  0]
-		    [ 0 Sy  0]
-		    [ 0  0  1]
+                        [Sx  0  0]
+                        [ 0 Sy  0]
+                        [ 0  0  1]
 
-Matrice de rotation
--------------------
+    Matrice de rotation
+    -------------------
 
-		[ cosθ −sinθ    0]
-		[ sinθ  cosθ    0]
-                [   0     0     1]
+                    [ cosθ −sinθ    0]
+                    [ sinθ  cosθ    0]
+                    [   0     0     1]
 
-'''
+    '''
 
 
 import math
@@ -207,9 +239,46 @@ if __name__ == '__main__':
 
                                      LISTS
 
+                            ┌─────────────────┐
+                            │() : tuples      │
+                            │[] : lists       │
+                            │{} : dictionaries│
+                            └─────────────────┘
 '''
-# simple list example ---------------------------------------------------------
+# Looping Over Lists ----------------------------------------------------------
+# The for-in statement makes it easy to loop over the items -------------------
+for item in L:
+    print item
 
+
+# Looping Over Lists ----------------------------------------------------------
+# If you need both index / item, use enumerate --------------------------------
+for index, item in enumerate(L):
+    print index, item
+
+
+# Looping Over Lists ----------------------------------------------------------
+# enumerate until 1 before end of list (slice) --------------------------------
+    vtx= [(1, 2), (3, 4), (5, 6)]
+    for i,v in enumerate(vtx[0: -1]):
+        normal = ((vtx[i+1].x - vtx[i].x, vtx[i+1].y - vtx[i].y))
+        print i, normal
+
+
+# Looping Over Lists ----------------------------------------------------------
+# If you need only the index, use range and len -------------------------------
+for index in range(len(L)):
+    print index
+
+
+# Looping Over Lists ----------------------------------------------------------
+# list supports the iterator protocol. To explicitly create an iterator, use the built-in iter function:
+i = iter(L)
+item = i.next() # fetch first value
+item = i.next() # fetch second value
+
+
+# Looping Over Lists ----------------------------------------------------------
 # iter through pair of coordinates in a flat list of coords--------------------
 flat_verts = [1, 2, 3, 4, 5, 6]
 v = iter(flat_verts)
@@ -219,6 +288,7 @@ for i in xrange(len(flat_verts)/2):
     print x,y
     print
 
+
 # flatten a list of list ------------------------------------------------------
 flatten = lambda l: [item for sublist in l for item in sublist]
 vtx= [(1, 2), (3, 4), (5, 6)]
@@ -226,7 +296,14 @@ flat_verts = flatten(vtx)
 print flat_verts
 
 
-# }}} ----------------------- END OF DICTIONARY SECTION -----------------------
+# sorting ---------------------------------------------------------------------
+student_tuples = [('john', 'A', 15),
+                  ('jane', 'B', 12),
+                  ('dave', 'B', 10) ]
+sorted(student_tuples, key=lambda student: student[2])   # sort by age
+
+
+# }}} ----------------------- END OF LIST SECTION -----------------------------
 
 # {{{ OPEN GL -----------------------------------------------------------------
 
@@ -464,5 +541,22 @@ unschedule(self, func)
 
 # }}} ------------------------- END OF PYGLET SECTION -------------------------
 
-# vim: set foldmarker={{{,}}} foldlevel=0 foldmethod=marker :
-# vim: setyntax=python
+'''   VIM memo
+
+     zM  : fold all
+     zR  : unfold all
+
+     42G : go to line 42
+     42gg
+
+     H         cursor to higher
+     M         cursor to middle
+     L         cursor to lower part of screen
+
+     Ctrl-u    screen up ½ page
+     Ctrl-d    screen down ½ page
+
+'''
+
+# vim: set foldmarker={{{,}}} foldlevel=0 foldmethod=marker foldcolumn=2 :
+# vim: set syntax=python
