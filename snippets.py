@@ -305,6 +305,21 @@ sorted(student_tuples, key=lambda student: student[2])   # sort by age
 
 # }}} ----------------------- END OF LIST SECTION -----------------------------
 
+# {{{ LISTS 2 -----------------------------------------------------------------
+
+numbers = [1, 2, 3, 4, 5]
+letters = ['a', 'b', 'c', 'd', 'e']
+for num, let in zip(numbers, letters):
+    print "Letter %d is '%s'" % (num, let)
+'''
+    Letter 1 is 'a'
+    Letter 2 is 'b'
+    Letter 3 is 'c'
+    Letter 4 is 'd'
+    Letter 5 is 'e'
+'''
+# }}} ----------------------- END OF LISTS 2 SECTION --------------------------
+
 # {{{ OPEN GL -----------------------------------------------------------------
 
 '''
@@ -558,5 +573,6 @@ unschedule(self, func)
 
 '''
 
-# vim: set foldmarker={{{,}}} foldlevel=0 foldmethod=marker foldcolumn=2 :
+# vim: set foldenable foldmarker={{{,}}} foldlevel=0 foldmethod=marker foldcolumn=2 :
 # vim: set syntax=python
+# vim: set nonu!
