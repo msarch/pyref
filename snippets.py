@@ -296,6 +296,10 @@ flat_verts = flatten(vtx)
 print flat_verts
 
 
+# }}} ----------------------- END OF LIST SECTION -----------------------------
+
+# {{{ LISTS 2 -----------------------------------------------------------------
+
 # sorting ---------------------------------------------------------------------
 student_tuples = [('john', 'A', 15),
                   ('jane', 'B', 12),
@@ -303,10 +307,7 @@ student_tuples = [('john', 'A', 15),
 sorted(student_tuples, key=lambda student: student[2])   # sort by age
 
 
-# }}} ----------------------- END OF LIST SECTION -----------------------------
-
-# {{{ LISTS 2 -----------------------------------------------------------------
-
+# zip -------------------------------------------------------------------------
 numbers = [1, 2, 3, 4, 5]
 letters = ['a', 'b', 'c', 'd', 'e']
 for num, let in zip(numbers, letters):
@@ -318,6 +319,23 @@ for num, let in zip(numbers, letters):
     Letter 4 is 'd'
     Letter 5 is 'e'
 '''
+
+# min / max / sort a list of lists / “key" function ---------------------------
+nested_list = [['cherry', 7], ['apple', 100], ['anaconda', 1360]]
+max(nested_list, key=lambda x: x[1])
+'''
+['anaconda', 1360]
+'''
+# The same also works for built-in min function:
+min(nested_list, key=lambda x: x[1])
+'''
+['cherry', 7]
+'''
+# works for sorted function:
+sorted(nested_list, key=lambda x: x[1])
+[['cherry', 7], ['apple', 100], ['anaconda', 1360]]
+
+
 # }}} ----------------------- END OF LISTS 2 SECTION --------------------------
 
 # {{{ OPEN GL -----------------------------------------------------------------
